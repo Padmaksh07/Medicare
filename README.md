@@ -17,6 +17,6 @@ Kaushtav Boruah
 
 Akashdip Sarma
 
-Kirtiman Bhattacharji
+Kirtiman Bhattacharjee
 
 Medicare aims to bridge the gap between patients and doctors through smart technology, responsible AI, and secure digital healthcare solutions.
