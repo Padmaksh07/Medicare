@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MediCare - Hospital Management System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <!-- LOGIN PAGE -->
+    <div class="container" id="login-container">
+        <div class="header">
+            <div class="logo">
+                <i class="fas fa-hospital-alt"></i>
+                MediCare
+            </div>
+            <div class="tagline">Advanced Hospital Management System</div>
+        </div>
+
+        <div class="login-container">
+            <div class="tabs">
+                <div class="tab active" onclick="switchTab('patient')">Patient</div>
+                <div class="tab" onclick="switchTab('doctor')">Doctor</div>
+                <div class="tab" onclick="switchTab('admin')">Admin</div>
+            </div>
+
+            <!-- Patient Login -->
+            <div class="login-form active" id="patient-login">
+                <div class="form-group">
+                    <label><i class="fas fa-user"></i> Patient ID / Email</label>
+                    <input type="text" id="patient-email" placeholder="Enter Patient ID or Email">
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-lock"></i> Password</label>
+                    <input type="password" id="patient-password" placeholder="Enter Password">
+                </div>
+                <button class="btn" onclick="login('patient')">
+                    <i class="fas fa-sign-in-alt"></i> Login as Patient
+                </button>
+                <p style="text-align: center; margin-top: 20px; color: #666;">
+                    Demo Login: Use any credentials
+                </p>
+            </div>
+
+            <!-- Doctor Login -->
+            <div class="login-form" id="doctor-login">
+                <div class="form-group">
+                    <label><i class="fas fa-user-md"></i> Doctor ID</label>
+                    <input type="text" id="doctor-id" placeholder="Enter Doctor ID">
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-lock"></i> Password</label>
+                    <input type="password" id="doctor-password" placeholder="Enter Password">
+                </div>
+                <button class="btn" onclick="login('doctor')">
+                    <i class="fas fa-sign-in-alt"></i> Login as Doctor
+                </button>
+                <p style="text-align: center; margin-top: 20px; color: #666;">
+                    Demo Login: Use any credentials
+                </p>
+            </div>
+
+            <!-- Admin Login -->
+            <div class="login-form" id="admin-login">
+                <div class="form-group">
+                    <label><i class="fas fa-shield-alt"></i> Admin ID</label>
+                    <input type="text" id="admin-id" placeholder="Enter Admin ID">
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-lock"></i> Password</label>
+                    <input type="password" id="admin-password" placeholder="Enter Password">
+                </div>
+                <button class="btn" onclick="login('admin')">
+                    <i class="fas fa-sign-in-alt"></i> Login as Admin
+                </button>
+                <p style="text-align: center; margin-top: 20px; color: #666;">
+                    Demo Login: Use any credentials
+                </p>
+            </div>
+
+            <div class="emergency-contact">
+                <h4><i class="fas fa-ambulance"></i> Emergency Contact</h4>
+                <p>For emergency medical assistance, call our 24/7 helpline:</p>
+                <a href="tel:108" class="emergency-btn">
+                    <i class="fas fa-phone-alt"></i> Call Emergency: 108
+                </a>
+            </div>
+
+            <div class="features">
+                <div class="feature-card">
+                    <i class="fas fa-user-md"></i>
+                    <h4>Expert Doctors</h4>
+                    <p>Consult with 10+ specialized doctors</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-robot"></i>
+                    <h4>AI Symptom Checker</h4>
+                    <p>Get instant symptom analysis</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-pills"></i>
+                    <h4>Online Pharmacy</h4>
+                    <p>Order medicines with prescription</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- DASHBOARD CONTAINER (Hidden until login) -->
+    <div class="container dashboard" id="dashboard">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="user-profile">
+                <div class="user-avatar" id="user-avatar">U</div>
+                <div class="user-name" id="user-name">User Name</div>
+                <div class="user-role" id="user-role">Patient</div>
+            </div>
+
+            <div class="menu">
+                <div class="menu-item active" onclick="showPage('dashboard-home')">
+                    <i class="fas fa-home"></i> Dashboard
+                </div>
+                <div class="menu-item" onclick="showPage('book-appointment')">
+                    <i class="fas fa-calendar-plus"></i> Book Appointment
+                </div>
+                <div class="menu-item" onclick="showPage('doctors')">
+                    <i class="fas fa-user-md"></i> Doctors
+                </div>
+                <div class="menu-item" onclick="showPage('pharmacy')">
+                    <i class="fas fa-pills"></i> Pharmacy
+                    <span class="cart-count" id="cart-count">0</span>
+                </div>
+                <div class="menu-item" onclick="showPage('chatbot')">
+                    <i class="fas fa-robot"></i> AI Assistant
+                </div>
+                <div class="menu-item" onclick="showPage('appointment-mgmt')">
+                    <i class="fas fa-calendar-alt"></i> My Appointments
+                </div>
+                <div class="menu-item" onclick="showPage('prescription-history')" id="prescription-menu">
+                    <i class="fas fa-prescription"></i> Prescriptions
+                </div>
+                <div class="menu-item" onclick="showPage('patients')" id="patients-menu">
+                    <i class="fas fa-users"></i> Patients
+                </div>
+            </div>
+
+            <button class="logout-btn" onclick="logout()">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </button>
+        </div>
+
+        <!-- Main Content Area -->
+        <div class="main-content">
+            <!-- DASHBOARD HOME PAGE -->
+            <div class="page active" id="dashboard-home">
+                <div class="page-header">
+                    <h1 class="page-title">
+                        <i class="fas fa-home"></i> Dashboard
+                    </h1>
+                    <p>Welcome to MediCare Hospital Management System</p>
+                </div>
+
+                <div class="content-area">
+                    <div class="stats-grid" id="dashboard-stats">
+                        <!-- Stats loaded by JavaScript -->
+                    </div>
+
+                    <div style="margin-top: 30px;">
+                        <h3><i class="fas fa-bell"></i> Recent Notifications</h3>
+                        <div style="background: #f8f9fa; padding: 15px; border-radius: 10px; margin-top: 10px;">
+                            <p>✅ Appointment confirmed with Dr. Arjun Kumar for tomorrow</p>
+                            <p>📦 Your medicines will be delivered today</p>
+                            <p>📋 Lab reports are ready to download</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- BOOK APPOINTMENT PAGE -->
+            <div class="page" id="book-appointment">
+                <div class="page-header">
+                    <h1 class="page-title">
+                        <i class="fas fa-calendar-plus"></i> Book Appointment
+                    </h1>
+                    <p>Select symptoms to find the right specialist</p>
+                </div>
+
+                <div class="content-area">
+                    <div class="symptom-checker" style="margin-bottom: 30px;">
+                        <h3><i class="fas fa-stethoscope"></i> Symptom Checker</h3>
+                        <p>Select your symptoms:</p>
+
+                        <div class="symptoms-grid" id="symptoms-grid">
+                            <div class="symptom-card" data-symptom="Fever">🤒 Fever</div>
+                            <div class="symptom-card" data-symptom="Headache">🤕 Headache</div>
+                            <div class="symptom-card" data-symptom="Cough">😷 Cough</div>
+                            <div class="symptom-card" data-symptom="Cold">🤧 Cold</div>
+                            <div class="symptom-card" data-symptom="Dizziness">💫 Dizziness</div>
+                            <div class="symptom-card" data-symptom="Vomiting">🤢 Vomiting</div>
+                            <div class="symptom-card" data-symptom="Chest Pain">💔 Chest Pain</div>
+                            <div class="symptom-card" data-symptom="Joint Pain">🦵 Joint Pain</div>
+                        </div>
+
+                        <textarea id="additional-symptoms" placeholder="Describe additional symptoms in detail..."
+                            style="width: 100%; padding: 15px; border: 2px solid #e0e0e0; border-radius: 10px; margin: 20px 0; min-height: 100px; font-family: inherit;"></textarea>
+
+                        <button class="btn" onclick="findDoctorBySymptoms()" style="width: 100%;">
+                            <i class="fas fa-search"></i> Find Recommended Doctor
+                        </button>
+                    </div>
+
+                    <div id="doctor-recommendation" style="margin: 30px 0;"></div>
+
+                    <div class="appointment-form">
+                        <h3><i class="fas fa-calendar-alt"></i> Appointment Details</h3>
+
+                        <div class="form-group">
+                            <label>Select Doctor</label>
+                            <select id="appointment-doctor" class="form-control"
+                                onchange="updateConsultationFee(); loadDoctorAvailability();">
+                                <option value="">-- Choose a specialist --</option>
+                            </select>
+                        </div>
+
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 20px 0;">
+                            <div class="form-group">
+                                <label>Appointment Date</label>
+                                <input type="date" id="appointment-date" class="form-control" min=""
+                                    onchange="loadAvailableSlots()">
+                            </div>
+
+                            <div class="form-group">
+                                <label>Select Time Slot</label>
+                                <select id="appointment-time" class="form-control">
+                                    <option value="">-- Select Time --</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- NEW: Doctor Availability Time Slots -->
+                        <div id="doctor-availability-section" style="display: none;">
+                            <h4><i class="fas fa-clock"></i> Doctor's Available Time Slots</h4>
+                            <div class="time-slots-container" id="time-slots-container">
+                                <!-- Time slots loaded dynamically -->
+                            </div>
+                            <p style="color: #666; font-size: 0.9rem; margin-top: 10px;">
+                                <i class="fas fa-info-circle"></i> Green slots are available, gray slots are unavailable
+                            </p>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Consultation Type</label>
+                            <div style="display: flex; gap: 15px; margin-top: 5px;">
+                                <label
+                                    style="display: flex; align-items: center; gap: 8px; padding: 12px 20px; border: 2px solid #e0e0e0; border-radius: 10px; cursor: pointer; transition: all 0.3s; flex: 1; justify-content: center;">
+                                    <input type="radio" name="consultation-type" value="clinic" checked>
+                                    <i class="fas fa-hospital"></i> In-Clinic
+                                </label>
+                                <label
+                                    style="display: flex; align-items: center; gap: 8px; padding: 12px 20px; border: 2px solid #e0e0e0; border-radius: 10px; cursor: pointer; transition: all 0.3s; flex: 1; justify-content: center;">
+                                    <input type="radio" name="consultation-type" value="video">
+                                    <i class="fas fa-video"></i> Video Call
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Symptoms Details</label>
+                            <textarea id="appointment-symptoms" class="form-control" rows="4"
+                                placeholder="Describe your symptoms in detail..."></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Consultation Fee</label>
+                            <div
+                                style="font-size: 1.8rem; color: #1a2980; font-weight: bold; padding: 20px; background: #f8f9fa; border-radius: 10px; text-align: center;">
+                                ₹<span id="consultation-fee">500</span>
+                                <div style="font-size: 0.9rem; color: #666; margin-top: 5px;">Includes GST and
+                                    consultation charges</div>
+                            </div>
+                        </div>
+
+                        <button class="btn" onclick="bookAppointment()" style="width: 100%;">
+                            <i class="fas fa-calendar-check"></i> Confirm Booking
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- DOCTORS PAGE -->
+            <div class="page" id="doctors">
+                <div class="page-header">
+                    <h1 class="page-title">
+                        <i class="fas fa-user-md"></i> Our Medical Specialists
+                    </h1>
+                    <p>10+ expert doctors with strong careers</p>
+                </div>
+
+                <div class="content-area">
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="doctor-search" placeholder="Search doctors by name or specialization..."
+                            onkeyup="searchDoctors()">
+                    </div>
+
+                    <div class="doctors-grid" id="doctors-list">
+                        <!-- Doctors loaded by JavaScript -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- PHARMACY PAGE -->
+            <div class="page" id="pharmacy">
+                <div class="page-header">
+                    <h1 class="page-title">
+                        <i class="fas fa-pills"></i> Hospital Pharmacy
+                    </h1>
+                    <p>20+ verified medicines with doorstep delivery</p>
+                </div>
+
+                <div class="content-area">
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="medicine-search" placeholder="Search medicines..."
+                            onkeyup="searchMedicines()">
+                    </div>
+
+                    <div class="medicines-grid" id="medicines-list">
+                        <!-- Medicines loaded by JavaScript -->
+                    </div>
+
+                    <div style="text-align: center; margin-top: 40px;">
+                        <button class="btn" onclick="viewCart()" style="margin-right: 15px;">
+                            <i class="fas fa-shopping-cart"></i> View Cart (<span id="cart-count-header">0</span>)
+                        </button>
+                        <button class="btn" onclick="uploadPrescription()">
+                            <i class="fas fa-upload"></i> Upload Prescription
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CHATBOT PAGE -->
+            <div class="page" id="chatbot">
+                <div class="page-header">
+                    <h1 class="page-title">
+                        <i class="fas fa-robot"></i> AI Medical Assistant
+                    </h1>
+                    <p>Get instant symptom analysis and health tips</p>
+                </div>
+
+                <div class="content-area">
+                    <div class="chatbot-container">
+                        <div class="chatbot-header">
+                            <div class="chatbot-avatar">
+                                <i class="fas fa-robot"></i>
+                            </div>
+                            <div>
+                                <h3>Dr. AI Assistant</h3>
+                                <p>AI-powered medical diagnosis and guidance</p>
+                                <div
+                                    style="display: flex; align-items: center; gap: 5px; font-size: 0.9rem; opacity: 0.9; margin-top: 5px;">
+                                    <span
+                                        style="width: 8px; height: 8px; background: #4CAF50; border-radius: 50%;"></span>
+                                    Online
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="chat-messages" id="chat-messages">
+                            <div class="message bot">
+                                <div class="message-content">
+                                    <strong>👋 Hello! I'm Dr. AI, your intelligent medical assistant.</strong>
+                                    <br><br>
+                                    I can help you with:
+                                    <br><br>
+                                    • <strong>Symptom Analysis:</strong> Describe your symptoms for preliminary
+                                    assessment<br>
+                                    • <strong>Medicine Information:</strong> Get details about medicines and dosage<br>
+                                    • <strong>First Aid Guidance:</strong> Emergency medical advice<br>
+                                    • <strong>Doctor Recommendation:</strong> Find the right specialist for your
+                                    condition<br>
+                                    • <strong>Health Tips:</strong> Preventive care and wellness advice<br>
+                                    <br>
+                                    <em>Note: I'm an AI assistant. For medical emergencies, please call 108
+                                        immediately.</em>
+                                    <br><br>
+                                    What can I help you with today?
+                                </div>
+                                <div class="message-time">Just now</div>
+                            </div>
+                        </div>
+
+                        <div class="quick-questions">
+                            <div class="quick-question" onclick="askQuickQuestion('I have fever and headache')">🤒 Fever
+                                & Headache</div>
+                            <div class="quick-question" onclick="askQuickQuestion('Cough and cold remedies')">😷 Cough &
+                                Cold</div>
+                            <div class="quick-question" onclick="askQuickQuestion('Stomach pain and nausea')">🤢 Stomach
+                                Issues</div>
+                            <div class="quick-question" onclick="askQuickQuestion('Dizziness and weakness')">💫
+                                Dizziness</div>
+                            <div class="quick-question" onclick="askQuickQuestion('Check medicine side effects')">💊
+                                Medicine Info</div>
+                        </div>
+
+                        <div class="chat-input">
+                            <input type="text" id="chat-input"
+                                placeholder="Describe your symptoms or ask a medical question..."
+                                onkeypress="handleChatEnter(event)">
+                            <button class="send-btn" onclick="sendChatbotMessage()">
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- APPOINTMENT MANAGEMENT PAGE (NEW) -->
+            <div class="page" id="appointment-mgmt">
+                <div class="page-header">
+                    <h1 class="page-title">
+                        <i class="fas fa-calendar-alt"></i> Appointment Management
+                    </h1>
+                    <p>View and manage your appointments</p>
+                </div>
+
+                <div class="content-area">
+                    <div class="sub-tabs">
+                        <button class="sub-tab active" onclick="showAppointmentTab('my-appointments')">My
+                            Appointments</button>
+                        <button class="sub-tab" onclick="showAppointmentTab('manage-appointments')"
+                            id="manage-appointments-tab" style="display: none;">Manage Appointments</button>
+                    </div>
+
+                    <div id="my-appointments-content">
+                        <div class="action-buttons">
+                            <button class="export-btn" onclick="exportAppointments()">
+                                <i class="fas fa-download"></i> Export to CSV
+                            </button>
+                            <button class="print-btn" onclick="printAppointments()">
+                                <i class="fas fa-print"></i> Print List
+                            </button>
+                        </div>
+
+                        <div class="history-section" id="appointments-list">
+                            <!-- Appointments loaded dynamically -->
+                        </div>
+                    </div>
+
+                    <div id="manage-appointments-content" style="display: none;">
+                        <h3>Manage Patient Appointments</h3>
+                        <div id="all-appointments-list">
+                            <!-- All appointments for admin/doctor -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PRESCRIPTION HISTORY PAGE (NEW) -->
+            <div class="page" id="prescription-history">
+                <div class="page-header">
+                    <h1 class="page-title">
+                        <i class="fas fa-prescription"></i> Prescription History
+                    </h1>
+                    <p>View your medical prescriptions</p>
+                </div>
+
+                <div class="content-area">
+                    <div class="action-buttons">
+                        <button class="export-btn" onclick="exportPrescriptions()">
+                            <i class="fas fa-download"></i> Export Prescriptions
+                        </button>
+                        <button class="print-btn" onclick="printPrescription()">
+                            <i class="fas fa-print"></i> Print Prescription
+                        </button>
+                    </div>
+
+                    <div class="history-section" id="prescriptions-list">
+                        <!-- Prescriptions loaded dynamically -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- PATIENTS PAGE (Admin/Doctor only) -->
+            <div class="page" id="patients">
+                <div class="page-header">
+                    <h1 class="page-title">
+                        <i class="fas fa-users"></i> Patients Database
+                    </h1>
+                    <p>Manage patient records and information</p>
+                </div>
+
+                <div class="content-area">
+                    <div id="patients-table">
+                        <!-- Patients loaded by JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL FOR APPOINTMENT BOOKING -->
+    <div class="modal" id="appointment-modal">
+        <div class="modal-content">
+            <button class="close-modal" onclick="closeModal()">×</button>
+            <h3 id="modal-title">Book Appointment</h3>
+            <div id="modal-body"></div>
+        </div>
+    </div>
+
+    <!-- MODAL FOR CART -->
+    <div class="modal" id="cart-modal">
+        <div class="modal-content">
+            <button class="close-modal" onclick="closeCart()">×</button>
+            <h3><i class="fas fa-shopping-cart"></i> Shopping Cart</h3>
+            <div id="cart-items"></div>
+            <div class="cart-summary" id="cart-summary"></div>
+            <button class="btn" onclick="checkout()" style="width: 100%; margin-top: 20px;">
+                <i class="fas fa-credit-card"></i> Proceed to Checkout
+            </button>
+        </div>
+    </div>
+
+    <!-- PRINTABLE CONTENT (HIDDEN) -->
+    <div id="print-content" style="display: none;"></div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
